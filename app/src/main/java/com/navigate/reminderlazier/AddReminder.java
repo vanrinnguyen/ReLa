@@ -3,6 +3,7 @@ package com.navigate.reminderlazier;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -41,7 +42,7 @@ public class AddReminder extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        getSupportActionBar();
         setContentView(R.layout.activity_add_reminder);
         setControl();
         Glide.with(AddReminder.this)
@@ -98,15 +99,15 @@ public class AddReminder extends AppCompatActivity {
     }
 
     private void handleOnClickBtnDone() {
-        String userEmail = "ducviencse";
-        String creator = edtFriendEmail.getText().toString();
+        SharedPreferences pre = getSharedPreferences ("email_user",MODE_PRIVATE);
+        String creator = pre.getString("username", "");
+        String userEmail = edtFriendEmail.getText().toString();
         String reminderName = edtReminderName.getText().toString();
         String location = edtLocation.getText().toString();
         String unixTime = txtDate.getText().toString() + txtTime.getText().toString();
         Long currentDate = new Date().getTime();
         String currentTime = currentDate.toString();
-        Log.d(TAG+ "final time: ", date.getTimeInMillis() +"");
-
+        Log.d(TAG, currentTime);
 
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
