@@ -8,9 +8,7 @@ import android.util.Log;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,10 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -31,6 +26,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.navigate.reminderlazier.utils.ContentSupplier;
 
 public class MainActivity extends AppCompatActivity {
     // TAG is for show some tag logs in LOG screen.
@@ -54,29 +50,19 @@ public class MainActivity extends AppCompatActivity {
     // TextView to Show Login User Email and Name.
     TextView LoginUserName, LoginUserEmail;
 
+    ContentSupplier contentSupplier = new ContentSupplier();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-//        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-//
 //        SignOutButton= (Button) findViewById(R.id.sign_out);
-//
-//        LoginUserName = (TextView) findViewById(R.id.textViewName);
-//
-//        LoginUserEmail = (TextView) findViewById(R.id.textViewEmail);
 
         signInButton = (com.google.android.gms.common.SignInButton)findViewById(R.id.sign_in_button);
 
         // Getting Firebase Auth Instance into firebaseAuth object.
         firebaseAuth = FirebaseAuth.getInstance();
-
-        // Hiding the TextView on activity start up time.
-//        LoginUserEmail.setVisibility(View.GONE);
-//        LoginUserName.setVisibility(View.GONE);
 
         // Creating and Configuring Google Sign In object.
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -95,7 +81,10 @@ public class MainActivity extends AppCompatActivity {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build();
 
-
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user != null) {
+            startListAlarmView();
+        }
         // Adding Click listener to User Sign in Google button.
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,19 +94,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-//        // Adding Click Listener to User Sign Out button.
-//        SignOutButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                UserSignOutFunction();
-//
-//            }
-//        });
-
     }
 
+    public void startListAlarmView(){
+        Intent view2 = new Intent(MainActivity.this, View2.class);
+        startActivity(view2);
+    }
 
     // Sign In function Starts From Here.
     public void UserSignInMethod(){
@@ -149,13 +131,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public String parseText(String input, String regex) {
-       input =  input.replaceAll(regex, "");
-       input = input.replace("com","");
-        input = input.replace("vn","");
-        return input.replace("gmail","");
-    }
-
     public void FirebaseUserAuth(GoogleSignInAccount googleSignInAccount) {
         AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
 
@@ -170,35 +145,21 @@ public class MainActivity extends AppCompatActivity {
                                     FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
                                     // Showing Log out button.
-//                                    SignOutButton.setVisibility(View.VISIBLE);
-//
-//                                    // Hiding Login in button.
-//                                    signInButton.setVisibility(View.GONE);
-//
-//                                    // Showing the TextView.
-//                                    LoginUserEmail.setVisibility(View.VISIBLE);
-//                                    LoginUserName.setVisibility(View.VISIBLE);
-//
-//                                    // Setting up name into TextView.
-//                                    LoginUserName.setText("NAME =  "+ firebaseUser.getDisplayName().toString());
-//
-//                                    // Setting up Email into TextView.
-//                                    LoginUserEmail.setText("Email =  "+ firebaseUser.getEmail().toString());
+
                                     SharedPreferences pre=getSharedPreferences ("email_user",MODE_PRIVATE);
-                                    SharedPreferences.Editor edit=pre.edit();
                                     String userMail = firebaseUser.getEmail().toString();
                                     String regex = "[^\\d\\w]";
-                                    String userName = parseText(userMail, regex);
-//                                    if (pre.getString("username",null) == null) {
-//
-//                                    }
-                                    edit.putString("username", userName);
-                                    edit.commit();
+                                    String userName = null;
+                                    if (pre.getString("username",null) == null) {
+                                        SharedPreferences.Editor edit=pre.edit();
+                                        userName = contentSupplier.parseText(userMail, regex);
+                                        edit.putString("username", userName);
+                                        edit.commit();
+                                    }
 
                                     Log.d(TAG, "username: " + userName);
 
-                                    Intent view2 = new Intent(MainActivity.this, View2.class);
-                                    startActivity(view2);
+                                   startListAlarmView();
 
 
                                 }else {

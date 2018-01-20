@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.navigate.reminderlazier.models.Time;
 import com.navigate.reminderlazier.models.TimesAdapter;
+import com.navigate.reminderlazier.utils.ContentSupplier;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,6 +37,8 @@ public class View2 extends AppCompatActivity {
     private TimesAdapter adapter;
     private List<Time> timeList;
     private String userName;
+    SharedPreferences preUser, preAlarm;
+    ContentSupplier contentSupplier = new ContentSupplier();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,8 +104,8 @@ public class View2 extends AppCompatActivity {
      */
     private void prepareTime() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        SharedPreferences pre = getSharedPreferences ("email_user",MODE_PRIVATE);
-        userName = pre.getString("username", null);
+        preUser = getSharedPreferences ("email_user",MODE_PRIVATE);
+        userName = preUser.getString("username", null);
         Log.d(TAG, "username: " + userName);
         if (userName == null) {
             return;
@@ -112,6 +115,7 @@ public class View2 extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                timeList.clear();
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
 
                     String creator = String.valueOf(dsp.child("creator").getValue());
@@ -122,9 +126,12 @@ public class View2 extends AppCompatActivity {
                     Long unixTime = Long.parseLong(String.valueOf(dsp.child("unixTime").getValue()));
 
                     Time a = new Time(new Date(unixTime), creator, reminderName, location);
+                    preAlarm = getSharedPreferences("alarm_mobile", MODE_PRIVATE);
+                    String res = contentSupplier.addSharedPreferences(preAlarm, dsp.getKey(), unixTime);
+                    Log.d(TAG, res);
+                    Log.d(TAG, String.valueOf(preAlarm.getLong(dsp.getKey(), 0)));
                     timeList.add(a);
                     adapter.notifyDataSetChanged();
-
                 }
             }
 
@@ -133,8 +140,6 @@ public class View2 extends AppCompatActivity {
 
             }
         });
-//        a = new Time("7:00", "vien", "nha hang", "nha hang");
-//        timeList.add(a);
 
     }
 
