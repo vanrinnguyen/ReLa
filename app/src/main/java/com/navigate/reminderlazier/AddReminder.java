@@ -117,6 +117,7 @@ public class AddReminder extends AppCompatActivity {
         DatabaseReference myRef = database.getReference("data");
         String regex = "[^\\d\\w]";
         for (String userEmail : userEmails) {
+            Log.d(TAG,"email friends:" + userEmails.length);
             String inputChild = contentSupplier.parseText(userEmail, regex);
             myRef.child(inputChild).child(currentTime).child("creator").setValue(creator);
             myRef.child(inputChild).child(currentTime).child("reminderName").setValue(reminderName);
@@ -130,7 +131,7 @@ public class AddReminder extends AppCompatActivity {
         myRef.child(inputChild).child(currentTime).child("reminderName").setValue(reminderName);
         myRef.child(inputChild).child(currentTime).child("location").setValue(location);
 
-        // Read from the database
+        /*// Read from the database
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -145,7 +146,7 @@ public class AddReminder extends AppCompatActivity {
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
-        });
+        });*/
 
     }
 

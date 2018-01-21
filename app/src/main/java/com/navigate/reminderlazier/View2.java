@@ -3,7 +3,9 @@ package com.navigate.reminderlazier;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -16,7 +18,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +42,7 @@ public class View2 extends AppCompatActivity {
     private TimesAdapter adapter;
     private List<Time> timeList;
     private String userName;
+    private ImageView  imvHeader;
     SharedPreferences preUser, preAlarm;
     ContentSupplier contentSupplier = new ContentSupplier();
     @Override
@@ -64,7 +70,11 @@ public class View2 extends AppCompatActivity {
                 startActivity(new Intent(View2.this, AddReminder.class));
             }
         });
-
+        imvHeader = findViewById(R.id.imvHeader);
+        Glide.with(View2.this)
+                .load(R.drawable.dog)
+                .crossFade()
+                .into(new GlideDrawableImageViewTarget(imvHeader));
     }
 
     /**
@@ -112,7 +122,7 @@ public class View2 extends AppCompatActivity {
         }
         DatabaseReference myRef = database.getReference("data").child(userName);
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 timeList.clear();
@@ -127,7 +137,8 @@ public class View2 extends AppCompatActivity {
 
                     Time a = new Time(new Date(unixTime), creator, reminderName, location);
                     preAlarm = getSharedPreferences("alarm_mobile", MODE_PRIVATE);
-                    String res = contentSupplier.addSharedPreferences(View2.this, preAlarm, dsp.getKey(), unixTime);
+                    int usecase = userName.equals(creator) ? 0 : 1;
+                    String res = contentSupplier.addSharedPreferences(View2.this, preAlarm, dsp.getKey(), unixTime, usecase);
                     Log.d(TAG, res);
                     Log.d(TAG, String.valueOf(preAlarm.getLong(dsp.getKey(), 0)));
                     timeList.add(a);
