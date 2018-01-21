@@ -1,7 +1,6 @@
 package com.navigate.reminderlazier;
 
 import android.app.DatePickerDialog;
-import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -37,9 +36,7 @@ public class AddReminder extends AppCompatActivity {
     TextView txtDate, txtTime;
     Button btnDone;
     ImageView imvHeader;
-    Toolbar toolbar;
     Calendar date = Calendar.getInstance();
-    Calendar time = Calendar.getInstance();
     String TAG = "AddReminder";
     ContentSupplier contentSupplier = new ContentSupplier();
 
@@ -121,10 +118,10 @@ public class AddReminder extends AppCompatActivity {
         String regex = "[^\\d\\w]";
         for (String userEmail : userEmails) {
             String inputChild = contentSupplier.parseText(userEmail, regex);
-            myRef.child(inputChild).child(currentTime).child("unixTime").setValue(unixTime);
-            myRef.child(inputChild).child(currentTime).child("creator").setValue(creator);
-            myRef.child(inputChild).child(currentTime).child("reminderName").setValue(reminderName);
-            myRef.child(inputChild).child(currentTime).child("location").setValue(location);
+        /*myRef.child(userEmail).child(currentTime).child("creator").setValue(creator);
+        myRef.child(userEmail).child(currentTime).child("reminderName").setValue(reminderName);
+        myRef.child(userEmail).child(currentTime).child("unixTime").setValue(unixTime);
+        myRef.child(userEmail).child(currentTime).child("location").setValue(location);*/
         }
 
         // Read from the database
