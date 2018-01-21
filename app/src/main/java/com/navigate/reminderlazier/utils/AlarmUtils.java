@@ -17,10 +17,15 @@ import java.util.Calendar;
  */
 public class AlarmUtils {
 
-    public static void create(Context context, long time) {
+    public static void create(Context context, long time, int usecase) {
         time = Calendar.getInstance().getTimeInMillis() + 10000;
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, SchedulingService.class);
+        Intent intent = null;
+        if (usecase == 0) {
+            intent = new Intent(context, SchedulingService.class);
+        } else {
+
+        }
         intent.putExtra(Constant.KEY_TYPE, time);
         PendingIntent pendingIntent =
                 PendingIntent.getService(context, (int)(time/1000), intent, PendingIntent.FLAG_UPDATE_CURRENT);

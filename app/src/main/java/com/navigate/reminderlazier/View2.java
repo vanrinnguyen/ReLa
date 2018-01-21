@@ -127,7 +127,8 @@ public class View2 extends AppCompatActivity {
 
                     Time a = new Time(new Date(unixTime), creator, reminderName, location);
                     preAlarm = getSharedPreferences("alarm_mobile", MODE_PRIVATE);
-                    String res = contentSupplier.addSharedPreferences(View2.this, preAlarm, dsp.getKey(), unixTime);
+                    int usecase = userName.equals(creator) ? 0 : 1;
+                    String res = contentSupplier.addSharedPreferences(View2.this, preAlarm, dsp.getKey(), unixTime, usecase);
                     Log.d(TAG, res);
                     Log.d(TAG, String.valueOf(preAlarm.getLong(dsp.getKey(), 0)));
                     timeList.add(a);

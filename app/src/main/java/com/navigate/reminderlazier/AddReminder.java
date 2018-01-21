@@ -117,6 +117,7 @@ public class AddReminder extends AppCompatActivity {
         DatabaseReference myRef = database.getReference("data");
         String regex = "[^\\d\\w]";
         for (String userEmail : userEmails) {
+            Log.d(TAG,"email friends:" + userEmails.length);
             String inputChild = contentSupplier.parseText(userEmail, regex);
             myRef.child(inputChild).child(currentTime).child("creator").setValue(creator);
             myRef.child(inputChild).child(currentTime).child("reminderName").setValue(reminderName);
