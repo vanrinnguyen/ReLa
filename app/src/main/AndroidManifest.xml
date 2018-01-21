@@ -20,7 +20,8 @@
         <activity android:name=".CountdownActivity"></activity>
         <activity android:name=".AddReminder">
         </activity>
-        <service android:name=".service.SchedulingService" /> 
+        <service android:name=".service.SchedulingService" />
+        <service android:name=".utils.AppService" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

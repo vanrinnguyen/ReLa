@@ -1,8 +1,11 @@
 package com.navigate.reminderlazier.utils;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.util.Log;
 
 import com.navigate.reminderlazier.CountdownActivity;
 import com.navigate.reminderlazier.MainActivity;
@@ -32,8 +35,12 @@ public class AppService extends IntentService {
         // loop until time is up
         long startTime = System.currentTimeMillis();
         long duration = intent.getLongExtra("duration", 0); // time in miniseconds
-        while ((System.currentTimeMillis() - startTime) < duration) {
-            if (CountdownActivity.appState == 13) {
+        while (true) {
+            if (CountdownActivity.appState == 1) {
+                AudioManager mgr = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+                int valuess = 9;//range(0-15)
+                mgr.setStreamVolume(AudioManager.STREAM_MUSIC, 100, 0);
+
                 // app is not opening now
                 // alert sound
                 if (!mPlayer.isPlaying()) {

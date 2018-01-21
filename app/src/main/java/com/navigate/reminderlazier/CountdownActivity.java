@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.navigate.reminderlazier.utils.AppService;
 
 import org.w3c.dom.Text;
 
@@ -43,6 +44,7 @@ public class CountdownActivity extends AppCompatActivity {
     private Button btnSpeak;
     private final int REQ_CODE_SPEECH_INPUT = 100;
     private String demo = "i scream and you scream we all scream for ice cream";
+//    private String demo = "hello hello hello";
     public static Context appInstance;
     public static int appState = 1;
 
@@ -73,6 +75,7 @@ public class CountdownActivity extends AppCompatActivity {
             }
         });
 
+        turnOnNotification();
     }
 
     @Override
@@ -129,7 +132,7 @@ public class CountdownActivity extends AppCompatActivity {
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-                "Say something;");
+                "Let's read aloud: "+demo);
         try {
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException a) {
@@ -164,6 +167,16 @@ public class CountdownActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    private void turnOnNotification() {
+        Intent i = new Intent(this, AppService.class);
+        i.putExtra("duration", (long) 60000);
+        Log.d("ringtone",ringtone+"");
+        if (ringtone != -1) {
+            i.putExtra("tone", listRingtone.get(ringtone));
+        }
+        startService(i);
     }
 
     private List<Integer> listRingtone = new ArrayList<>();
