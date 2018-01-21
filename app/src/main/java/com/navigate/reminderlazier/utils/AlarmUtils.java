@@ -18,16 +18,18 @@ import java.util.Calendar;
 public class AlarmUtils {
 
     public static void create(Context context, long time) {
-        Log.d("testAlarm", "hello");
+        time = Calendar.getInstance().getTimeInMillis() + 10000;
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, SchedulingService.class);
         intent.putExtra(Constant.KEY_TYPE, time);
         PendingIntent pendingIntent =
                 PendingIntent.getService(context, (int)(time/1000), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Log.d("testAlarm", "hello 1 "+time);
             alarmManager
                     .setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
         } else {
+            Log.d("testAlarm", "hello 2" +time);
             alarmManager
                     .set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
         }
