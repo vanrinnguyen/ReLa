@@ -25,9 +25,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.navigate.reminderlazier.fragments.TimePickerFragment;
+import com.navigate.reminderlazier.utils.ContentSupplier;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class AddReminder extends AppCompatActivity {
     EditText edtReminderName, edtLocation, edtFriendEmail;
@@ -38,6 +41,8 @@ public class AddReminder extends AppCompatActivity {
     Calendar date = Calendar.getInstance();
     Calendar time = Calendar.getInstance();
     String TAG = "AddReminder";
+    ContentSupplier contentSupplier = new ContentSupplier();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,10 +106,11 @@ public class AddReminder extends AppCompatActivity {
     private void handleOnClickBtnDone() {
         SharedPreferences pre = getSharedPreferences ("email_user",MODE_PRIVATE);
         String creator = pre.getString("username", "");
-        String userEmail = edtFriendEmail.getText().toString();
+        Log.d(TAG, "creator: " + creator);
+        String[] userEmails = edtFriendEmail.getText().toString().split(";");
         String reminderName = edtReminderName.getText().toString();
         String location = edtLocation.getText().toString();
-        String unixTime = txtDate.getText().toString() + txtTime.getText().toString();
+        String unixTime = String.valueOf(date.getTimeInMillis());
         Long currentDate = new Date().getTime();
         String currentTime = currentDate.toString();
         Log.d(TAG, currentTime);
@@ -112,11 +118,15 @@ public class AddReminder extends AppCompatActivity {
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("data");
+        String regex = "[^\\d\\w]";
+        for (String userEmail : userEmails) {
+            String inputChild = contentSupplier.parseText(userEmail, regex);
+            myRef.child(inputChild).child(currentTime).child("unixTime").setValue(unixTime);
+            myRef.child(inputChild).child(currentTime).child("creator").setValue(creator);
+            myRef.child(inputChild).child(currentTime).child("reminderName").setValue(reminderName);
+            myRef.child(inputChild).child(currentTime).child("location").setValue(location);
+        }
 
-        /*myRef.child(userEmail).child(currentTime).child("creator").setValue(creator);
-        myRef.child(userEmail).child(currentTime).child("reminderName").setValue(reminderName);
-        myRef.child(userEmail).child(currentTime).child("unixTime").setValue(unixTime);
-        myRef.child(userEmail).child(currentTime).child("location").setValue(location);*/
         // Read from the database
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
