@@ -33,7 +33,7 @@ public class AppService extends IntentService {
         long startTime = System.currentTimeMillis();
         long duration = intent.getLongExtra("duration", 0); // time in miniseconds
         while ((System.currentTimeMillis() - startTime) < duration) {
-            if (CountdownActivity.appState == 1) {
+            if (CountdownActivity.appState == 13) {
                 // app is not opening now
                 // alert sound
                 if (!mPlayer.isPlaying()) {
