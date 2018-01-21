@@ -107,14 +107,14 @@ public class AddReminder extends AppCompatActivity {
         SharedPreferences pre = getSharedPreferences ("email_user",MODE_PRIVATE);
         String creator = pre.getString("username", "");
         Log.d(TAG, "creator: " + creator);
-        String[] userEmails = edtFriendEmail.getText().toString().split(";");
+        String lstEmail = edtFriendEmail.getText().toString();
+        String[] userEmails = lstEmail.split(";");
         String reminderName = edtReminderName.getText().toString();
         String location = edtLocation.getText().toString();
         String unixTime = String.valueOf(date.getTimeInMillis());
         Long currentDate = new Date().getTime();
         String currentTime = currentDate.toString();
         Log.d(TAG, currentTime);
-
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("data");
@@ -127,6 +127,12 @@ public class AddReminder extends AppCompatActivity {
             myRef.child(inputChild).child(currentTime).child("location").setValue(location);
         }
 
+        String inputChild = contentSupplier.parseText(creator, regex);
+        myRef.child(inputChild).child(currentTime).child("unixTime").setValue(unixTime);
+        myRef.child(inputChild).child(currentTime).child("creator").setValue(creator);
+        myRef.child(inputChild).child(currentTime).child("reminderName").setValue(reminderName);
+        myRef.child(inputChild).child(currentTime).child("location").setValue(location);
+
         // Read from the database
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -134,6 +140,7 @@ public class AddReminder extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 Log.d(TAG, "Value is: " + dataSnapshot.getValue());
+                finish();
             }
 
             @Override
@@ -142,6 +149,7 @@ public class AddReminder extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
+
     }
 
     private void setControl() {
