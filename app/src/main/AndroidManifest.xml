@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CountdownActivity"/>
+        <activity android:name=".CountdownActivity"></activity>
         <activity android:name=".AddReminder">
         </activity>
         <activity android:name=".MainActivity">

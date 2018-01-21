@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 GoogleSignInAccount googleSignInAccount = googleSignInResult.getSignInAccount();
 
                 FirebaseUserAuth(googleSignInAccount);
+
             }
 
         }
@@ -170,29 +171,29 @@ public class MainActivity extends AppCompatActivity {
                 );
     }
 
-//    public void UserSignOutFunction() {
-//
-//        // Sing Out the User.
-//        firebaseAuth.signOut();
-//        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
-//                new ResultCallback<Status>() {
-//                    @Override
-//                    public void onResult(@NonNull Status status) {
-//                        Toast.makeText(MainActivity.this, "Logout Successfully", Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//        );
-//
-//
-//        // After logout Hiding sign out button.
-//        SignOutButton.setVisibility(View.GONE);
-//
-//        // After logout setting up email and name to null.
-//        LoginUserName.setText(null);
-//        LoginUserEmail.setText(null);
-//
-//        // After logout setting up login button visibility to visible.
-//        signInButton.setVisibility(View.VISIBLE);
-//    }
+/*    public void UserSignOutFunction() {
+
+        // Sing Out the User.
+        firebaseAuth.signOut();
+        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        Toast.makeText(MainActivity.this, "Logout Successfully", Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+
+        // After logout Hiding sign out button.
+        SignOutButton.setVisibility(View.GONE);
+
+        // After logout setting up email and name to null.
+        LoginUserName.setText(null);
+        LoginUserEmail.setText(null);
+
+        // After logout setting up login button visibility to visible.
+        signInButton.setVisibility(View.VISIBLE);
+    }*/
 
 }
