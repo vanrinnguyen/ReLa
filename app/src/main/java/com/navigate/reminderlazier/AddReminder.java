@@ -118,10 +118,10 @@ public class AddReminder extends AppCompatActivity {
         String regex = "[^\\d\\w]";
         for (String userEmail : userEmails) {
             String inputChild = contentSupplier.parseText(userEmail, regex);
-        /*myRef.child(userEmail).child(currentTime).child("creator").setValue(creator);
-        myRef.child(userEmail).child(currentTime).child("reminderName").setValue(reminderName);
-        myRef.child(userEmail).child(currentTime).child("unixTime").setValue(unixTime);
-        myRef.child(userEmail).child(currentTime).child("location").setValue(location);*/
+            myRef.child(userEmail).child(currentTime).child("creator").setValue(creator);
+            myRef.child(userEmail).child(currentTime).child("reminderName").setValue(reminderName);
+            myRef.child(userEmail).child(currentTime).child("unixTime").setValue(unixTime);
+            myRef.child(userEmail).child(currentTime).child("location").setValue(location);
         }
 
         String inputChild = contentSupplier.parseText(creator, regex);
