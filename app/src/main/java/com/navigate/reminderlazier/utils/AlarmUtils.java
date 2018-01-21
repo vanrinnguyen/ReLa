@@ -17,16 +17,18 @@ import java.util.Calendar;
  */
 public class AlarmUtils {
 
-    public static void create(Context context, long time, int usecase) {
+    public static void create(Context context, String currtime, long time, int usecase) {
         time = Calendar.getInstance().getTimeInMillis() + 10000;
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = null;
         if (usecase == 0) {
             intent = new Intent(context, SchedulingService.class);
         } else {
-
+            intent = new Intent(context, SchedulingService.class);
         }
         intent.putExtra(Constant.KEY_TYPE, time);
+        intent.putExtra(Constant.KEY_STT, usecase);
+        intent.putExtra(Constant.CURR_TIME, currtime);
         PendingIntent pendingIntent =
                 PendingIntent.getService(context, (int)(time/1000), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

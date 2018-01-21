@@ -130,8 +130,18 @@ public class AddReminder extends AppCompatActivity {
         myRef.child(inputChild).child(currentTime).child("creator").setValue(creator);
         myRef.child(inputChild).child(currentTime).child("reminderName").setValue(reminderName);
         myRef.child(inputChild).child(currentTime).child("location").setValue(location);
-
-        /*// Read from the database
+        if (userEmails.length > 0) {
+            SharedPreferences preFriends = getSharedPreferences("alarm_friend", MODE_PRIVATE);
+            SharedPreferences.Editor edit=preFriends.edit();
+            Log.d(TAG, userEmails.toString());
+            String name = "";
+            for (String userEmail : userEmails) {
+                name = name + userEmail + ";";
+            }
+            edit.putString(currentTime, name);
+            edit.commit();
+        }
+        // Read from the database
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -146,7 +156,7 @@ public class AddReminder extends AppCompatActivity {
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
-        });*/
+        });
 
     }
 
